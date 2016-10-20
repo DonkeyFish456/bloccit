@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
 
   def format_name
     if name
-      self.name = name.gsub(/[a-z']+/,&:capitalize)
+      self.name = name.gsub(/[ ][ a-zA-Z']+/,&:capitalize)
     end
   end
 end
