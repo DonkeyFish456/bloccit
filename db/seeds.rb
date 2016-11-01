@@ -31,12 +31,15 @@ end
 
 #Create Posts
 50.times do
-  Post.create!(
+  post = Post.create!(
     user: users.sample,
     topic: topics.sample,
     title: RandomData.random_sentence,
     body: RandomData.random_paragraph
   )
+
+  post.update_attribute(:created_at, rand(10.minutes .. 1.year).ago)
+  rand(1..5).times { post.votes.create!(value: [1, -1].sample, user: users.sample) }
 end
 posts = Post.all
 
@@ -63,16 +66,24 @@ Post.find_or_create_by(title: 'unique title', body: 'unique body' )
 # Create an admin user
 admin = User.create!(
     name:     'Admin User',
-    email:    'admin@example.com',
-    password: 'helloworld',
+    email:    'stan@admin.com',
+    password: 'password',
     role:     'admin'
 )
 
 # Create a member
 member = User.create!(
     name:     'Member User',
-    email:    'member@example.com',
-    password: 'helloworld'
+    email:    'stan@member.com',
+    password: 'password'
+)
+
+# Create a moderator
+moderator = User.create!(
+    name:     'Member User',
+    email:    'stan@moderator.com',
+    password: 'password',
+    role:     'moderator'
 )
 
 puts 'Seed finished'
@@ -82,3 +93,4 @@ puts "#{SponsoredPost.count} sponsored posts created"
 puts "#{Post.count} posts created"
 puts "#{Comment.count} comments created"
 puts "#{Question.count} questions created"
+puts "#{Vote.count} votes created"
